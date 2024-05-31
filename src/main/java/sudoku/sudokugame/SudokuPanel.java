@@ -258,6 +258,42 @@ public class SudokuPanel extends JPanel {
                 }
             }
         }
+        // Highlight duplicates
+        g2d.setColor(new Color(255, 0, 0, 100)); // Semi-transparent red
+        for (int row = 0; row < 9; row++) {
+            Set<String> seenInRow = new HashSet<>();
+            for (int col = 0; col < 9; col++) {
+                String value = puzzle.board[row][col];
+                if (!value.isEmpty() && !seenInRow.add(value)) {
+                    g2d.fillRect(col * slotWidth, row * slotHeight, slotWidth, slotHeight);
+                }
+            }
+        }
+        for (int col = 0; col < 9; col++) {
+            Set<String> seenInCol = new HashSet<>();
+            for (int row = 0; row < 9; row++) {
+                String value = puzzle.board[row][col];
+                if (!value.isEmpty() && !seenInCol.add(value)) {
+                    g2d.fillRect(col * slotWidth, row * slotHeight, slotWidth, slotHeight);
+                }
+            }
+        }
+        int boxWidth = puzzle.getBOXWIDTH();
+        int boxHeight = puzzle.getBOXHEIGHT();
+        for (int boxRow = 0; boxRow < puzzle.getNumRows(); boxRow += boxHeight) {
+            for (int boxCol = 0; boxCol < puzzle.getNumColumns(); boxCol += boxWidth) {
+                Set<String> seenInBox = new HashSet<>();
+                for (int row = boxRow; row < boxRow + boxHeight; row++) {
+                    for (int col = boxCol; col < boxCol + boxWidth; col++) {
+                        String value = puzzle.board[row][col];
+                        if (!value.isEmpty() && !seenInBox.add(value)) {
+                            g2d.fillRect(col * slotWidth, row * slotHeight, slotWidth, slotHeight);
+                        }
+                    }
+                }
+            }
+        }
+
         // Draw grid lines on top of everything
         for (int x = 0; x <= getWidth(); x += slotWidth) {
             g2d.setColor(Color.BLACK);
